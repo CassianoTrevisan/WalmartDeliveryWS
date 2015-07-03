@@ -58,11 +58,12 @@ public class RoutesManagerServlet extends HttpServlet {
 		     for(Mapa m : routesLoaded){
 		    	 sb.append("{\"id\":"+m.getId()+",\"nome\":\""+m.getNome()+"\",\"rotas\":\""+m.getRotas()+"\"},");
 		     }
-		     sb.deleteCharAt(sb.lastIndexOf(","));
+		     if(sb.length() > 3){
+		    	 sb.deleteCharAt(sb.lastIndexOf(","));
+		     }
 		     sb.append("]");
 		     PrintWriter out = response.getWriter();
 	    	 out.write(sb.toString());
-	    	 System.out.println(sb.toString());
 		     response.setStatus(200);  
 		 }
 		 else if(action.equals("remove")){

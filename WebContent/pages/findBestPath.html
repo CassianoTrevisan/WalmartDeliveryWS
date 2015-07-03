@@ -56,7 +56,7 @@
                     },
                     
                     error: function(jqXHR, textStatus, errorThrown){
-                  	  $(".alert-danger").html("Acorreu um erro ao carregar os mapas.");
+                  	    $(".alert-danger").html("Acorreu um erro ao carregar os mapas.");
               			$(".alert-danger").fadeTo("slow", 1);
               			$(".alert-danger").delay(500).fadeTo("slow", 0.0);
                     }
@@ -104,19 +104,19 @@
 			
 			<div class="form-group">
             	<label for="originPoint" class="col-sm-3 control-label">Origem</label>           
-            	<input type="text" id="originPoint" class="form-control" required value="A"/>            	
+            	<input type="text" id="originPoint" class="form-control" required/>            	
         	</div>
         	<div class="form-group">
             	<label for="destinyPoint" class="col-sm-3 control-label">Destino</label>           
-            	<input type="text" id="destinyPoint" class="form-control" required value="E"/>            	
+            	<input type="text" id="destinyPoint" class="form-control" required/>            	
         	</div>
         	<div class="form-group">
             	<label for="fuelPrice" class="col-sm-3 control-label">Preço comb.</label>           
-            	<input type="text" id="fuelPrice" class="form-control" required value="3.0"/>            	
+            	<input type="text" id="fuelPrice" class="form-control" required/>            	
         	</div>
         	<div class="form-group">
             	<label for="autonomy" class="col-sm-3 control-label">Autonomia</label>           
-            	<input type="text" id="autonomy" class="form-control" required value="9"/>            	
+            	<input type="text" id="autonomy" class="form-control" required/>            	
         	</div>
         	<div class="form-group">
         		<label for="mapa" class="col-sm-3 control-label">Mapa</label>
