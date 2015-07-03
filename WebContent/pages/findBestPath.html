@@ -14,14 +14,12 @@
         		pl.add("routes", $('#routes').val());
         		
         		if(isNaN(Number($("#fuelPrice").val()))){
-        			console.log('entrou is nan');
         			$(".alert-success").addClass("hide");
         			$(".alert-danger").html("Formato do campo Preço comb. inválido (ex: 3.0)");
         			$(".alert-danger").fadeTo("slow", 1);
           			$(".alert-danger").delay(2000).fadeTo("slow", 0.0);
         		}
         		else if(isNaN(Number($("#autonomy").val()))){
-        			console.log('entrou is nan');
         			$(".alert-success").addClass("hide");
         			$(".alert-danger").html("Formato do campo Autonomia inválido (ex: 10)");
         			$(".alert-danger").fadeTo("slow", 1);
@@ -33,7 +31,6 @@
         	}
         	function findClosestPath_callBack(r)
         	{
-        		//console.log(r)
         		if(r != null && r.indexOf("Formato") > -1){
         			$(".alert-success").addClass("hide");
         			$(".alert-danger").html(r);
@@ -79,7 +76,6 @@
         	}
         	
         	function setRoutes(option){
-        		console.log(option.attr('routes'));
         		$("#routes").val(option.attr('routes'));
         	}
         	

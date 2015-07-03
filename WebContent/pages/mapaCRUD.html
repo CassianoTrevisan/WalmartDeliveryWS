@@ -5,6 +5,17 @@
  
  
      	function salvarRota(){
+     		
+     		if($("#map").val().length > 45 || $("#routes").val().length > 5000){
+     			$(".alert-danger").html("Você excedeu o tamanho máximo dos campos (Mapa = 45, Rotas = 5000), tente novamente.");
+      			$(".alert-danger").fadeTo("slow", 1);
+      			$(".alert-danger").delay(500).fadeTo("slow", 0.0);
+            	editting = false;
+            	$("#cancelButton").addClass("hide");
+            	$("form").find("input[type=text], textarea").val("");
+            	return false;
+     		}
+     		
 			if(!editting){
 	     		$.ajax({
 	                type: "POST",
@@ -23,8 +34,12 @@
 	                
 	                //If there was no resonse from the server
 	                error: function(jqXHR, textStatus, errorThrown){
-	                     console.log("Something really bad happened " + textStatus);
-	                      //$("#ajaxResponse").html(jqXHR.responseText);
+	                	$(".alert-danger").html("Houve um erro fatal. Verfique os valores digitados e tente novamente.");
+	          			$(".alert-danger").fadeTo("slow", 1);
+	          			$(".alert-danger").delay(500).fadeTo("slow", 0.0);
+	                	editting = false;
+	                	$("#cancelButton").addClass("hide");
+	                	$("form").find("input[type=text], textarea").val("");
 	                },
 	                complete: function (){
 	                	$("form").find("input[type=text], textarea").val("");
