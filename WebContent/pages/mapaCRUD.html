@@ -1,0 +1,195 @@
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <script type="text/javascript">
+        
+ 		var editting = false;	
+ 
+ 
+     	function salvarRota(){
+			if(!editting){
+	     		$.ajax({
+	                type: "POST",
+	                url: "http://localhost:8080/WalmartDeliveryWS/RoutesManagerServlet",
+	                data: $("#mapaForm").serialize()+"&action=save",
+	                dataType: "text",
+	                
+	                //if received a response from the server
+	                success: function( data, textStatus, jqXHR) {
+	                	loadTable();
+	                	$(".alert-success").html("Mapa salvo com sucesso.");
+	                    $(".alert-success").fadeTo("slow", 1);
+	          			$(".alert-success").delay(500).fadeTo("slow", 0.0);
+	                    
+	                },
+	                
+	                //If there was no resonse from the server
+	                error: function(jqXHR, textStatus, errorThrown){
+	                     console.log("Something really bad happened " + textStatus);
+	                      //$("#ajaxResponse").html(jqXHR.responseText);
+	                },
+	                complete: function (){
+	                	$("form").find("input[type=text], textarea").val("");
+	                }
+	      
+	            });
+	     		
+			}else{
+				$.ajax({
+	                type: "POST",
+	                url: "http://localhost:8080/WalmartDeliveryWS/RoutesManagerServlet",
+	                data: $("#mapaForm").serialize()+"&action=update",
+	                dataType: "text",
+	                
+	                //if received a response from the server
+	                success: function( data, textStatus, jqXHR) {
+	                	loadTable();
+	                	$(".alert-success").html("Mapa salvo com sucesso.");
+	                    $(".alert-success").fadeTo("slow", 1);
+	          			$(".alert-success").delay(500).fadeTo("slow", 0.0);
+	          			
+	          			editting = false;
+	            		$("#cancelButton").addClass("hide"); 
+	            		
+	                },
+	                
+	                //If there was no resonse from the server
+	                error: function(jqXHR, textStatus, errorThrown){
+	                	$(".alert-danger").html("Acorreu um erro ao editar o mapa.");
+	          			$(".alert-danger").fadeTo("slow", 1);
+	          			$(".alert-danger").delay(500).fadeTo("slow", 0.0);
+	                	editting = false;
+	                	$("#cancelButton").addClass("hide");
+	                },
+	                complete: function (){
+	                	$("form").find("input[type=text], textarea").val("");
+	                }
+	      
+	            });	
+	     		
+	     	}
+     	}
+     	
+     	function loadTable(){
+     	      $.ajax({
+                  type: "POST",
+                  url: "http://localhost:8080/WalmartDeliveryWS/RoutesManagerServlet",
+                  data: $("#mapaForm").serialize()+"&action=load",
+                  dataType: "json",
+                  
+                  //if received a response from the server
+                  success: function( data, textStatus, jqXHR) {
+				  		                    
+                    renderTable(data);  
+                  },
+                  
+                  //If there was no resonse from the server
+                  error: function(jqXHR, textStatus, errorThrown){
+                	  $(".alert-danger").html("Acorreu um erro ao carregar os mapas.");
+            			$(".alert-danger").fadeTo("slow", 1);
+            			$(".alert-danger").delay(500).fadeTo("slow", 0.0);
+                  }
+        
+              });
+     	}
+     	
+     	function remover(id){
+     		$.ajax({
+                type: "POST",
+                url: "http://localhost:8080/WalmartDeliveryWS/RoutesManagerServlet",
+                data: "id="+id+"&action=remove",
+                dataType: "text",
+                
+                //if received a response from the server
+                success: function( data, textStatus, jqXHR) {
+				  		                    
+                    loadTable();	
+                    $(".alert-success").html("Mapa removido com sucesso.");
+          			$(".alert-success").fadeTo("slow", 1);
+          			$(".alert-success").delay(500).fadeTo("slow", 0.0);
+                },
+                
+                //If there was no resonse from the server
+                error: function(jqXHR, textStatus, errorThrown){
+                	$(".alert-danger").html("Acorreu um erro ao remover o mapa.");
+          			$(".alert-danger").fadeTo("slow", 1);
+          			$(".alert-danger").delay(500).fadeTo("slow", 0.0);
+          			
+                },
+                complete: function (){
+                	$("form").find("input[type=text]").val("");
+                }
+      
+            });
+     	}
+     	
+     	function editar(id, button){
+     		var nome = button.parent().parent().children().eq(0).html();
+     		var rotas = button.parent().parent().children().eq(1).html();
+     		
+     		$("#map").val(nome);
+     		$("#routes").val(rotas);
+     		$("#id").val(id);
+     		editting = true;
+     		$("#cancelButton").removeClass("hide");
+     	}
+     	
+     	function renderTable(data){
+     		var row = "";
+     		$.each(data, function (i, val){
+	     		var editButton = '<input type="button" onclick="editar('+val.id+', $(this));" class="btn btn-warning pull-right" value="Editar"/>';
+	     		var removeButton = '<input type="button" onclick="remover('+val.id+');" class="btn btn-danger pull-right" value="Remover"/>';
+     			
+     			row += "<div class='row'>";
+     			row += "<div class='col-md-2'>"+val.nome+"</div>";
+     			row += "<div class='col-md-6'>"+val.rotas+"</div>";
+     			row += "<div class='col-md-2'>"+editButton+"</div>";
+     			row += "<div class='col-md-2'>"+removeButton+"</div>";
+     			row += "</div>";
+     		});
+     		
+     		$("#table").html(row);
+     	}
+     	
+     	function cancelarEdicao(){
+     		$("#cancelButton").addClass("hide");
+     		editting = false;
+     		$("form").find("input[type=text], textarea").val("");
+     	}
+     	
+     	$( document ).ready(function() {
+     		loadTable();
+   		});
+ </script>
+<style>
+.row{
+	border: 2px solid blue;
+	background-color: lightblue;
+	margin-bottom: 2px;	
+}
+</style>
+<div class="panel-body" style="width: 40%; margin-left: 30%">
+	<div class="alert alert-success" role="alert" style="opacity: 0;"></div>
+	<div class="alert alert-danger" role="alert" style="opacity: 0;"></div>
+	<form  id="mapaForm" class="form-horizontal" role="form">
+	 	<input type="hidden" id="id" name="id"/>	
+		<div class="form-group">
+		   	<label for="map" class="col-md-2 control-label">Mapa</label>
+		   	<div class="col-md-8">           
+			   	<input type="text" id="map" name="map" class="form-control" required
+			   	value="Parana" />     
+		   	</div>       	
+		</div>
+		<div class="form-group">
+		   	<label for="routes" class="col-md-2 control-label">Rotas</label>
+		   	<div class="col-md-8">           
+			   	<textarea type="text" id="routes" name="routes" class="form-control" required/>
+		   	</div>            	
+		</div>
+		<div class="form-actions">
+		   	<input type="button" onclick="salvarRota();" class="btn btn-success pull-right" value="Salvar"/>
+		   	<input id="cancelButton" type="button" onclick="cancelarEdicao();" class="btn btn-danger pull-left hide" value="Cancelar Edição"/>
+		</div>
+	</form>
+	
+</div>
+<div id="table" style="width: 80%; margin-left: 10%">
+</div>

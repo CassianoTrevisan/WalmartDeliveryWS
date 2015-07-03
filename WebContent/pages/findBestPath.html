@@ -1,0 +1,143 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Walmart Save Money Live Better</title>
+	<script type="text/javascript">
+	        
+			var url = "http://localhost:8080/WalmartDeliveryWS/services/Dijkstra";
+	
+        	function findClosestPath()
+        	{
+        		var pl = new SOAPClientParameters();
+        		pl.add("originPoint", $('#originPoint').val());
+        		pl.add("destinyPoint", $('#destinyPoint').val());
+        		pl.add("fuelPrice", $('#fuelPrice').val());
+        		pl.add("autonomy", $('#autonomy').val());
+        		pl.add("routes", $('#routes').val());
+        		
+        		if(isNaN(Number($("#fuelPrice").val()))){
+        			console.log('entrou is nan');
+        			$(".alert-success").addClass("hide");
+        			$(".alert-danger").html("Formato do campo Preço comb. inválido (ex: 3.0)");
+        			$(".alert-danger").fadeTo("slow", 1);
+          			$(".alert-danger").delay(2000).fadeTo("slow", 0.0);
+        		}
+        		else if(isNaN(Number($("#autonomy").val()))){
+        			console.log('entrou is nan');
+        			$(".alert-success").addClass("hide");
+        			$(".alert-danger").html("Formato do campo Autonomia inválido (ex: 10)");
+        			$(".alert-danger").fadeTo("slow", 1);
+          			$(".alert-danger").delay(2000).fadeTo("slow", 0.0);
+        		}
+        		else{
+        			SOAPClient.invoke(url, "findClosestPath", pl, true, findClosestPath_callBack);
+        		}
+        	}
+        	function findClosestPath_callBack(r)
+        	{
+        		//console.log(r)
+        		if(r != null && r.indexOf("Formato") > -1){
+        			$(".alert-success").addClass("hide");
+        			$(".alert-danger").html(r);
+        			$(".alert-danger").fadeTo("slow", 1);
+          			$(".alert-danger").delay(2000).fadeTo("slow", 0.0);
+        		}else{
+	        		$(".alert-success").html(r);
+	        		$(".alert-success").removeClass("hide");
+        		}
+        	}
+        	
+        	function loadMaps(){
+        		$.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/WalmartDeliveryWS/RoutesManagerServlet",
+                    data: $("#mapaForm").serialize()+"&action=load",
+                    dataType: "json",
+                    
+                    success: function( data, textStatus, jqXHR) {
+  				  		                    
+                      renderSelect(data);
+                      $("#mapa").change();
+                    },
+                    
+                    error: function(jqXHR, textStatus, errorThrown){
+                  	  $(".alert-danger").html("Acorreu um erro ao carregar os mapas.");
+              			$(".alert-danger").fadeTo("slow", 1);
+              			$(".alert-danger").delay(500).fadeTo("slow", 0.0);
+                    }
+          
+                });
+        	}
+        	
+        	function renderSelect(data){
+        		var option = "";
+         		$.each(data, function (i, val){
+         			option += "<option value='"+val.id+"' routes='"+val.rotas+"'>";
+         			option += val.nome;
+         			option += "</option>";
+         		});
+         		
+         		$("#mapa").html(option);
+        	}
+        	
+        	function setRoutes(option){
+        		console.log(option.attr('routes'));
+        		$("#routes").val(option.attr('routes'));
+        	}
+        	
+        	$( document ).ready(function() {
+       		   $("#mapa").attr('style', 'display: block !important');
+       		   loadMaps();
+       		   
+       		});
+    </script>
+
+<style>
+.form-control{
+	width: 200px;
+}
+</style>
+
+<div>
+
+	  <div class="panel-body" style="width: 40%; margin-left: 30%">
+        <div class="alert alert-success hide" role="alert"></div>
+		<div class="alert alert-danger" role="alert" style="opacity: 0"></div>
+		
+		<form  class="form-horizontal" role="form">
+			<center> <h3>Sistema Logistico Walmart</h3></center>
+					
+			
+			<div class="form-group">
+            	<label for="originPoint" class="col-sm-3 control-label">Origem</label>           
+            	<input type="text" id="originPoint" class="form-control" required value="A"/>            	
+        	</div>
+        	<div class="form-group">
+            	<label for="destinyPoint" class="col-sm-3 control-label">Destino</label>           
+            	<input type="text" id="destinyPoint" class="form-control" required value="E"/>            	
+        	</div>
+        	<div class="form-group">
+            	<label for="fuelPrice" class="col-sm-3 control-label">Preço comb.</label>           
+            	<input type="text" id="fuelPrice" class="form-control" required value="3.0"/>            	
+        	</div>
+        	<div class="form-group">
+            	<label for="autonomy" class="col-sm-3 control-label">Autonomia</label>           
+            	<input type="text" id="autonomy" class="form-control" required value="9"/>            	
+        	</div>
+        	<div class="form-group">
+        		<label for="mapa" class="col-sm-3 control-label">Mapa</label>
+	        	 <select id="mapa" class="selectpicker show-tick form-control" onchange="setRoutes($('#mapa option:selected'))">
+			    </select>
+			</div>
+        	<div class="form-group">
+        		<label for="routes" class="col-sm-3 control-label">Rotas do Mapa</label>
+				<textarea type="text" id="routes" class="form-control" required readonly="readonly"/>
+			</div>
+        	
+        	
+			<div class="form-actions">
+            	<input type="button" onclick="findClosestPath();" class="btn btn-success pull-right" value="Calcular"/>
+        	</div>
+        	 
+		</form>	
+	</div>
+</div>
+

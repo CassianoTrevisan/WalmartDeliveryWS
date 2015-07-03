@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Walmart Save Money Live Better</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="ACME Inc.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	<!-- JQUERY -->
+    <script src="js/jquery-2.1.3.min.js"></script>     
+    
+    <!-- Bootstrap -->
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/bootstrap-select.min.css" />
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-select.min.js"></script>
+	
+	<script type="text/javascript" src="js/soapclient.js"></script>
+    <script type="text/javascript">
+        	
+        	function findBestRoute(){
+        		$("#view").load("findBestPath.html");
+        	}
+        	function manageMaps(){
+        		$("#view").load("mapaCRUD.html");
+        	}
+        	$( document ).ready(function() {
+       		  $("#divMenu").load("menu.html");
+       		});
+    </script>
+</head>
+<body>
+<div>
+
+		<div id="divMenu"></div>
+		<div id="view"></div>
+
+</div>
+</body>
+</html>
