@@ -21,7 +21,11 @@ You can also generate a war file and deploy it to weblogic for example.
 
 Once the project is running, open your browser and paste "http://localhost:8080/WalmartDeliveryWS/pages/index.html", this will give
 access to the main page of the system. On right side of the navigation bar there is a 'Opçoes' dropdown button. Use it to first of all 
-insert the maps you wish to test and then after under 'Rotas' fulfill the form and pick a previously saved map. Hit 'Calcular'.
+insert the maps you wish to test and then after under 'Rotas' fulfill the form and pick a previously saved map.
+
+Pay attention to the format of the field 'Rotas'. Example: A B 10-B C 20-C D 30. Each route must be separated by a '-' sign. If you do not follow this pattern you will get an error when you try to find the best path.
+
+Hit 'Calcular'.
 
 The main action of the system, which is calculated and feedback the best path, was enginnered under Apache Axis Web Service, which is
 a test main request. Thus any other applications in any technology can consume this service. The rest was implemented using simple servlets
