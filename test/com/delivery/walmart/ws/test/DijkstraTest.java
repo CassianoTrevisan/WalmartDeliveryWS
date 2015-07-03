@@ -15,15 +15,6 @@ public class DijkstraTest {
 	Double autonomy = new Double(10.5);
 	String routes = "A B 10-C D 15-E G 50";
 	
-	@Test
-	public final void testComputePaths() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public final void testGetShortestPathTo() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public final void testFindClosestPath() {
@@ -57,11 +48,6 @@ public class DijkstraTest {
 		String expectedResult = "Formato do mapa inválido ou ponto origem/destino inexistente";
 		
 		assertEquals(result, expectedResult);
-	}
-
-	@Test
-	public final void testComputePath() {
-		fail("Not yet implemented");
 	}
 
 }
